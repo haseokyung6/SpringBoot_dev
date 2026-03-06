@@ -1,6 +1,7 @@
 package com.basic.dev;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
@@ -8,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 public class SpringBootDevApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootDevApplication.class, args);
+        SpringApplication.run(SpringBootDevApplication.class, args);
 	}
 
     @Bean
