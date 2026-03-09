@@ -9,5 +9,5 @@ import lombok.ToString;
 @ToString
 public class CustomerVO {
     private String mode;
-    private String rate;
+    private double rate;
 }

@@ -1,7 +1,7 @@
 package com.basic.dev.runner;
 
-import com.basic.myspringboot.config.CustomerVO;
-import com.basic.myspringboot.property.MyBootProperties;
+import com.basic.dev.config.CustomerVO;
+import com.basic.dev.property.MyBootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
