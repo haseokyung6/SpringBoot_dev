@@ -1,79 +1,57 @@
 package com.basic.dev.controller;
 
-import com.basic.dev.entity.Book;
-import com.basic.dev.repository.BookRepository;
+import com.basic.dev.dto.BookDTO;
+import com.basic.dev.service.BookService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
+@RequiredArgsConstructor
 public class BookRestController {
 
-    private final BookRepository bookRepository;
-
-    public BookRestController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private final BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public ResponseEntity<List<BookDTO.BookResponse>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BookDTO.BookResponse> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
-        Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
-
-        if (optionalBook.isPresent()) {
-            return ResponseEntity.ok(optionalBook.get());
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<BookDTO.BookResponse> getBookByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
     @GetMapping("/author/{author}")
-    public List<Book> getBooksByAuthor(@PathVariable String author) {
-        return bookRepository.findByAuthor(author);
+    public ResponseEntity<List<BookDTO.BookResponse>> getBooksByAuthor(@PathVariable String author) {
+        return ResponseEntity.ok(bookService.getBooksByAuthor(author));
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        Book savedBook = bookRepository.save(book);
-        return ResponseEntity.ok(savedBook);
+    public ResponseEntity<BookDTO.BookResponse> createBook(@Valid @RequestBody BookDTO.BookCreateRequest request) {
+        return ResponseEntity.ok(bookService.createBook(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        return bookRepository.findById(id)
-                .map(foundBook -> {
-                    foundBook.setTitle(book.getTitle());
-                    foundBook.setAuthor(book.getAuthor());
-                    foundBook.setIsbn(book.getIsbn());
-                    foundBook.setPrice(book.getPrice());
-                    foundBook.setPublishDate(book.getPublishDate());
-
-                    Book updatedBook = bookRepository.save(foundBook);
-                    return ResponseEntity.ok(updatedBook);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BookDTO.BookResponse> updateBook(
+            @PathVariable Long id,
+            @Valid @RequestBody BookDTO.BookUpdateRequest request
+    ) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(book -> {
-                    bookRepository.delete(book);
-                    return ResponseEntity.noContent().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 }
