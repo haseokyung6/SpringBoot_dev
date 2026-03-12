@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>User 수정</title>
+</head>
+<body>
+<h1>User 수정</h1>
+
+<form action="#" th:action="@{/update/{id}(id=${user.id})}" th:object="${user}" method="post">
+    <div>
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="email">Email</label>
+        <input type="text" th:field="*{email}" id="email">
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+
+    <br>
+
+    <input type="submit" value="수정 완료">
+</form>
+
+<p>
+    <a th:href="@{/}">목록으로</a>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>User 목록</title>
+</head>
+<body>
+<h1>User 목록</h1>
+
+<p>
+    <a th:href="@{/signup}">회원 등록</a>
+</p>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+        <td>
+            <a th:href="@{/edit/{id}(id=${user.id})}">수정</a>
+        </td>
+        <td>
+            <a th:href="@{/delete/{id}(id=${user.id})}"
+               onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
